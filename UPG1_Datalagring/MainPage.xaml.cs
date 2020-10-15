@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using System.Xml;
 using UPG1_Datalagring.Models;
 using UPG1_Datalagring.Services;
 using Windows.Foundation;
@@ -34,7 +35,7 @@ namespace UPG1_Datalagring
         {
             this.InitializeComponent();
 
-            OpenFilePickerAsync().GetAwaiter();
+            //OpenFilePickerAsync().GetAwaiter();
 
 
             //CreateFileAsync().GetAwaiter();
@@ -54,6 +55,8 @@ namespace UPG1_Datalagring
 
             Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
 
+            
+
             if (file != null)
             {
                 // Application now has read/write access to the picked file
@@ -61,10 +64,8 @@ namespace UPG1_Datalagring
 
                 if (file.ContentType == "application/vnd.ms-excel")
                 {
-                    //ReadFromFile(file);
-                    this.textblock.Text = file.DisplayName;
-
                     string text = await Windows.Storage.FileIO.ReadTextAsync(file);
+                    
                     this.textblock.Text = text;
 
                     try
@@ -73,42 +74,73 @@ namespace UPG1_Datalagring
                     }
                     catch { }
                 }
-                //else if (file.ContentType == "text/xml")
-                //{
-                //    this.textblock.Text = "Detta är en xml fil.";
-                //}
-                //else if (file.ContentType == "application/json")
-                //{
-                //    this.textblock.Text = "Detta är en json fil.";
-                //}
+                else if (file.ContentType == "text/xml")
+                {
+                    //string text = await Windows.Storage.FileIO.ReadTextAsync(file);
+                    //this.textblock.Text = text;
+                    //this.textblock.Text = file.Path;
 
-                //else
-                //{
-                //    this.textblock.Text = "Något gick fel";
-                //}
+                    //using XmlTextReader xml = new XmlTextReader(Convert.ToString(file.Path));
+                    
+                    //xml.Read();
+
+                        //while (xml.Read())
+                        //{
+                        //    // Console.WriteLine(xml.LocalName);
+                        //    // Console.WriteLine(xml.Name);
+                        //    //Console.WriteLine(xml.NodeType);
+                        //    //onsole.WriteLine(xml.Value);
+
+                        //    XmlNodeType ntype = xml.NodeType;
+
+                        //    if (ntype == XmlNodeType.Element)
+                        //    {
+                        //        this.textblock.Text = xml.Name;
+                        //        //if (xml.Name == "book")
+                        //        //{
+                        //        //    Console.WriteLine(xml.Name);
+                        //        //    Console.WriteLine("Author: " + xml.GetAttribute("author"));
+                        //        //}
+                        //    }
+                        //    if (ntype == XmlNodeType.Text)
+                        //    {
+                        //        this.textblock.Text = xml.Value;
+                        //        //Console.WriteLine("Value: " + xml.Value);
+                        //    }
+                }
+                    else if (file.ContentType == "application/json")
+                    {
+                        var path = file.Path;
+                        this.textblock.Text = file.Path;
+
+                    //using StreamReader reader = new StreamReader(path);
+                    //var json = reader.ReadToEnd();
+                    //this.textblock.Text = json;
+                    //try
+                    //{
+                    //    contentList.Add(new Content($"Texten i filen är följande: {json}"));
+                    //}
+                    //catch { }
+
+                }
+
+                    //else
+                    //{
+                    //    this.textblock.Text = "Något gick fel";
+                    //}
+                }
+                else
+                {
+                    this.textblock.Text = "Operation cancelled.";
+                }
+
+
             }
-            else
-            {
-                this.textblock.Text = "Operation cancelled.";
-            }
-
 
         }
-
-        private async Task OpenFilePickerAsync()
-        {
-            
-            
-
-        }
-        public void ReadFromFile(StorageFile file, char delimiter = ';')
-        {
-
-
-        }
-
     }
-}
+
+
 
 
 
