@@ -113,14 +113,14 @@ namespace UPG1_Datalagring
                         var path = file.Path;
                         this.textblock.Text = file.Path;
 
-                    //using StreamReader reader = new StreamReader(path);
-                    //var json = reader.ReadToEnd();
-                    //this.textblock.Text = json;
-                    //try
-                    //{
-                    //    contentList.Add(new Content($"Texten i filen är följande: {json}"));
-                    //}
-                    //catch { }
+                    using StreamReader reader = new StreamReader(path);
+                    var json = reader.ReadToEnd();
+                    this.textblock.Text = json;
+                    try
+                    {
+                        contentList.Add(new Content($"Texten i filen är följande: {json}"));
+                    }
+                    catch { }
 
                 }
 
