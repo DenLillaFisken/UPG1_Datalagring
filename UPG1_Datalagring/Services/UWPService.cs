@@ -9,9 +9,5 @@ namespace UPG1_Datalagring.Services
     public static class UWPService
     {
 
-        public static async Task Testing()
-        {
-
-        }
     }
-}
+ }

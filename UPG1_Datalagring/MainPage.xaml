@@ -13,8 +13,16 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="openFileExplorerBtn" Click="openFileExplorerBtn_Click"/>
+        <Button x:Name="openFileExplorerBtn" Click="openFileExplorerBtn_Click" Width="200" Height="400"/>
+        
         <TextBlock x:Name="textblock" Width="500" Height="500"/>
+
+        <TextBlock x:Name="name" Width="200" Height="100"/>
+        <TextBlock x:Name="age" Width="200" Height="100"/>
+        <TextBlock x:Name="city" Width="200" Height="100"/>
+
+        <Button x:Name="createTxtBtn" Click="openFileExplorerBtn_Click" Width="200" Height="400"/>
+       
 
         <ListView Grid.Row="1" x:Name="lvWeatherList" ItemsSource="{x:Bind contentList}" Margin="0, 20">
             <ListView.ItemTemplate>
