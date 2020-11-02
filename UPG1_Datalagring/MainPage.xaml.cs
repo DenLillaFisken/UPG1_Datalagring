@@ -32,10 +32,15 @@ namespace UPG1_Datalagring
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        StorageFolder storageFolder;
+        //StorageFolder storageFolder;
         public MainPage()
         {
             this.InitializeComponent();
+
+            cbFileType.Items.Add("txt");
+            cbFileType.Items.Add("xml");
+            cbFileType.Items.Add("json");
+            cbFileType.Items.Add("csv");
         }
          
         public ContentList contentList = new ContentList();
@@ -49,21 +54,34 @@ namespace UPG1_Datalagring
             picker.FileTypeFilter.Add(".txt");
 
             StorageFile file = await picker.PickSingleFileAsync();
+            //var test = file.FileType;
+
+            //textblock.Text = test;
 
             if (file != null){
 
-                if (file.ContentType == "application/vnd.ms-excel")
+                if (file.FileType == ".txt")
                 {
                     string text = await Windows.Storage.FileIO.ReadTextAsync(file);
 
                     try
                     {
-                        contentList.Add(new Content($"Texten i filen är följande: {text}"));
+                        contentList.Add(new Content($"{text}"));
+                    }
+                    catch { }
+                }
+                else if (file.FileType == ".csv")
+                {
+                    string text = await Windows.Storage.FileIO.ReadTextAsync(file);
+
+                    try
+                    {
+                        contentList.Add(new Content($"{text}"));
                     }
                     catch { }
                 }
 
-                else if (file.ContentType == "text/xml")
+                else if (file.FileType == ".xml")
                 {
                     string text = await Windows.Storage.FileIO.ReadTextAsync(file);
                     XmlDocument xmlDoc = new XmlDocument();
@@ -71,21 +89,21 @@ namespace UPG1_Datalagring
 
                     foreach (XmlNode node in xmlDoc.DocumentElement.ChildNodes)
                     {
-                        string textoutput = node.InnerText; //or loop through its children as well
                         try
                         {
-                            contentList.Add(new Content($"{textoutput}"));
+                            foreach (XmlNode child in node.ChildNodes)
+                                contentList.Add(new Content(node.InnerText));
                         }
                         catch { }
                     }
                 }
-                else if (file.ContentType == "application/json")
+                else if (file.FileType == ".json")
                 {
                     string text = await Windows.Storage.FileIO.ReadTextAsync(file);
                     var obj = JsonConvert.DeserializeObject<dynamic>(text);
                     try
                     {
-                        contentList.Add(new Content($"Message: {obj.message}"));
+                        contentList.Add(new Content($"My Name is {obj.Name}, I am: {obj.Age} years old and live in {obj.City}"));
                     }
                     catch { }
                 }
@@ -96,18 +114,76 @@ namespace UPG1_Datalagring
 
             }
         }
-
-        private void createXmlBtn_Click(object sender, RoutedEventArgs e)
+        private async void CreateFileBtn_Click(object sender, RoutedEventArgs e)
         {
+            Person person = new Person(tbName.Text, Convert.ToInt32(tbAge.Text), tbCity.Text);
+
+            tbName.Text = "";
+            tbAge.Text = "";
+            tbCity.Text = "";
+
+            Object selectedItem = cbFileType.SelectedItem;
+            string fileType = Convert.ToString(selectedItem);
+            string fileName = "";
+
+            switch (fileType)
+            {
+                case "txt":
+                    {
+                        fileName = "AlexTxt.txt";
+                        //skapa filen
+                        await UWPService.CreateTxtFile(fileName);
+
+                        //skriv till filen
+                        var txtFilePath = @$"C:\Users\alexa\OneDrive\Dokument\{fileName}";
+                        StorageFile file = await StorageFile.GetFileFromPathAsync(txtFilePath);
+                        await UWPService.WriteTxtFile(file, person);
+
+                        break;
+                    } 
+                case "xml":
+                    {
+                        fileName = "AlexXml.xml";
+                        //skapa filen
+                        await UWPService.CreateTxtFile(fileName);
+
+                        //skriv till filen
+                        var txtFilePath = @$"C:\Users\alexa\OneDrive\Dokument\{fileName}";
+                        StorageFile file = await StorageFile.GetFileFromPathAsync(txtFilePath);
+                        await UWPService.WriteXmlFile(file, person);
+
+                        break;
+                    }    
+                case "json":
+                    {
+                        fileName = "AlexJson.json";
+                        //skapa filen
+                        await UWPService.CreateTxtFile(fileName);
+
+                        //skriv till filen
+                        var txtFilePath = @$"C:\Users\alexa\OneDrive\Dokument\{fileName}";
+                        StorageFile file = await StorageFile.GetFileFromPathAsync(txtFilePath);
+                        await UWPService.WriteJsonFile(file, person);
+
+                        break;
+                    }         
+                case "csv":
+                    {
+                        fileName = "AlexCsv.csv";
+                        //skapa filen
+                        await UWPService.CreateTxtFile(fileName);
+
+                        //skriv till filen
+                        var txtFilePath = @$"C:\Users\alexa\OneDrive\Dokument\{fileName}";
+                        StorageFile file = await StorageFile.GetFileFromPathAsync(txtFilePath);
+                        await UWPService.WriteCsvFile(file, person);
+
+                        break;
+                    }                                
+            }
 
         }
-
-        private void createCsvBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void createJsonBtn_Click(object sender, RoutedEventArgs e)
+        private void CbFileType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }

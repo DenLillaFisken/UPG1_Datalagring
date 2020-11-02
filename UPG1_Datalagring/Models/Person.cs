@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace UPG1_Datalagring.Models
 {
-    class Person
+    public class Person
     {
+        public Person()
+        {
+
+        }
         public Person(string name, int age, string city)
         {
             Name = name;

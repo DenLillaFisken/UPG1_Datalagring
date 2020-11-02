@@ -11,20 +11,26 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
-            <RowDefinition Height="9*"/>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <Button x:Name="openFileExplorerBtn" Click="openFileExplorerBtn_Click" Width="200" Height="400"/>
-        
-        <TextBlock x:Name="textblock" Width="500" Height="500"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="name" Width="200" Height="100"/>
-        <TextBlock x:Name="age" Width="200" Height="100"/>
-        <TextBlock x:Name="city" Width="200" Height="100"/>
+        <TextBlock x:Name="textblock" Grid.Row="2" Grid.ColumnSpan="3"/>
 
-        <Button x:Name="createTxtBtn" Click="openFileExplorerBtn_Click" Width="200" Height="400"/>
-       
+        <TextBox x:Name="tbName" Grid.Row="0" Grid.Column="0" Margin="5" BorderBrush="Black" PlaceholderText="Write your name"/>
+        <TextBox x:Name="tbAge" Grid.Row="0" Grid.Column="1" Margin="5" BorderBrush="Black" PlaceholderText="Write your age"/>
+        <TextBox x:Name="tbCity" Grid.Row="0" Grid.Column="2" Margin="5" BorderBrush="Black" PlaceholderText="Write your city"/>
 
-        <ListView Grid.Row="1" x:Name="lvWeatherList" ItemsSource="{x:Bind contentList}" Margin="0, 20">
+        <ComboBox x:Name="cbFileType" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Height="50" Header="File type" PlaceholderText="Select file type" SelectionChanged="CbFileType_SelectionChanged"/>
+        <Button x:Name="CreateFileBtn" Click="CreateFileBtn_Click" Height="50" Content="Create File" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch"/>
+
+        <ListView Grid.Row="2" Grid.ColumnSpan="3" x:Name="lvWeatherList" ItemsSource="{x:Bind contentList}" Margin="0, 20">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -37,5 +43,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Button x:Name="openFileExplorerBtn" Click="openFileExplorerBtn_Click" Width="200" Height="400" Grid.Row="3"/>
     </Grid>
 </Page>
